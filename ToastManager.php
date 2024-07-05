@@ -11,6 +11,7 @@ use Symfony\Component\HttpFoundation as Http;
 use Symfony\Component\HttpFoundation\Exception\SessionNotFoundException;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\HttpFoundation\Session\Session;
+use function Northrook\Core\Function\hashKey;
 
 final readonly class ToastManager implements Countable
 {
@@ -23,44 +24,31 @@ final readonly class ToastManager implements Countable
 
         $flashBag ??= $this->flashBag();
 
-        $flashes = array_merge( ... array_values( $flashBag->all() ) );
+        $flashes = $flashBag->all();
 
         $notifications = [];
 
-        dump( $flashes );
-
-        foreach ( $flashes as $value ) {
-            dump( $value );
-            // $level       = $value[ 'level' ];
-            // $message     = $value[ 'message' ];
-            // $description = $value[ 'description' ];
-            // $timeout     = $value[ 'timeout' ];
-            //
-            // /** @var   Timestamp $timestamp */
-            // $timestamp = $value[ 'timestamp' ];
-            //
-            // if ( isset( $notifications[ $message ] ) ) {
-            //     $notifications[ $message ][ 'timestamp' ][ $timestamp->timestamp ] = $timestamp;
-            // }
-            //
-            // else {
-            //     $notifications[ $message ] = [
-            //         'level'       => $level,
-            //         'message'     => $message,
-            //         'description' => $description,
-            //         'timeout'     => $timeout,
-            //         'timestamp'   => [ $timestamp->timestamp => $timestamp, ],
-            //     ];
-            // }
+        foreach ( $flashes as $type => $flash ) {
+            foreach ( $flash as $message ) {
+                if ( $message instanceof Notification ) {
+                    $notifications[ $message->key ] = $message;
+                }
+                elseif ( is_string( $message ) | $message instanceof Stringable ) {
+                    $key                   = hashKey( [ $type, $message ] );
+                    $notifications[ $key ] = new Notification( $type, $message );
+                }
+            }
         }
 
+        foreach ( $notifications as $type => $notification ) {
+            dump( $notification->getTimestamp() );
+        }
+
+        usort(
+            $notifications, static fn ( $a, $b ) => ( $b->timestamp ) <=> ( $a->timestamp ),
+        );
+
         return $notifications;
-        //
-        // usort(
-        //     $notifications, static fn ( $a, $b ) => ( end( $a[ 'timestamp' ] ) ) <=> ( end( $b[ 'timestamp' ] ) ),
-        // );
-        //
-        // return $notifications;
     }
 
 

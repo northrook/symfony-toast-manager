@@ -7,20 +7,20 @@ use InvalidArgumentException;
 use Northrook\Core\Timestamp;
 use Northrook\Core\Trait\PropertyAccessor;
 use Northrook\Logger\Log;
-use function array_key_last;
 use function in_array;
 use function Northrook\Core\Function\hashKey;
 use function trim;
 
 /**
  *
- * @property-read string     $key         // Unique key to identify this object internally
- * @property-read  string    $type        // One of 'info', 'success', 'warning', 'error', or 'notice'
- * @property-read  string    $message     // The main message to show the user
- * @property-read  ?string   $description // [optional] Provide more details.
- * @property-read  ?int      $timeout     // How long before the message should time out, in milliseconds
- * @property-read  array     $instances   // All the times this exact Notification has been created since it was last rendered
- * @property-read  Timestamp $timestamp   // The most recent timestamp
+ * @property-read string     $key           // Unique key to identify this object internally
+ * @property-read  string    $type          // One of 'info', 'success', 'warning', 'error', or 'notice'
+ * @property-read  string    $message       // The main message to show the user
+ * @property-read  ?string   $description   // [optional] Provide more details.
+ * @property-read  ?int      $timeout       // How long before the message should time out, in milliseconds
+ * @property-read  array     $instances     // All the times this exact Notification has been created since it was last rendered
+ * @property-read  Timestamp $timestamp     // The most recent timestamp object
+ * @property-read  int       $unixTimestamp // The most recent timestamps' unix int
  *
  * @internal
  * @author Martin Nielsen <mn@northrook.com>
@@ -69,13 +69,14 @@ final class Notification implements Countable
 
     public function __get( string $property ) : null | string | int | array {
         return match ( $property ) {
-            'key'         => hashKey( [ $this->type, $this->message, $this->description, $this->timeout ] ),
-            'type'        => $this->type,
-            'message'     => $this->message,
-            'description' => $this->description,
-            'timeout'     => $this->timeout,
-            'instances'   => $this->instances,
-            'timestamp'   => $this->instances[ array_key_last( $this->instances ) ],
+            'key'           => hashKey( [ $this->type, $this->message, $this->description, $this->timeout ] ),
+            'type'          => $this->type,
+            'message'       => $this->message,
+            'description'   => $this->description,
+            'timeout'       => $this->timeout,
+            'instances'     => $this->instances,
+            'timestamp'     => $this->getTimestamp(),
+            'unixTimestamp' => $this->getTimestamp()->unixTimestamp,
         };
     }
 
@@ -128,6 +129,10 @@ final class Notification implements Countable
      */
     public function count() : int {
         return count( $this->instances );
+    }
+
+    private function getTimestamp() : Timestamp {
+        return $this->instances[ array_key_last( $this->instances ) ];
     }
 
 }
