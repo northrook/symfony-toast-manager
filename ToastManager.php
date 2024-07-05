@@ -5,6 +5,7 @@ declare( strict_types = 1 );
 namespace Northrook\Symfony;
 
 use Countable;
+use Northrook\Symfony\ToastManager\Notification;
 use Stringable;
 use Symfony\Component\HttpFoundation as Http;
 use Symfony\Component\HttpFoundation\Exception\SessionNotFoundException;
@@ -92,24 +93,24 @@ final readonly class ToastManager implements Countable
      * @param null|string  $description
      * @param null|int     $timeoutMs
      *
-     * @return $this
+     * @return Notification
      */
     public function addToast(
         string  $type,
         string  $message,
         ?string $description = null,
         ?int    $timeoutMs = 4500,
-    ) : ToastManager {
+    ) : Notification {
 
         foreach ( $this->readFlashBagContents() as $key => $value ) {
             dump( $key, $value );
         }
 
-        $toast = new Toast( $type, $message, $description, $timeoutMs );
+        $toast = new Notification( $type, $message, $description, $timeoutMs );
 
         $this->flashBag()->add( $type, $toast );
 
-        return $this;
+        return $toast;
     }
 
     private function readFlashBagContents() : array {
