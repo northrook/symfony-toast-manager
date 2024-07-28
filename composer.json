@@ -1,11 +1,11 @@
 {
-  "name": "northrook/symfony-toast-manager",
+  "name": "northrook/symfony-toasts",
   "description": "A Toast notification manager for Symfony.",
   "type": "library",
   "license": "MIT",
   "autoload": {
     "psr-4": {
-      "Northrook\\Symfony\\": ""
+      "Northrook\\Symfony\\Service\\": "src"
     }
   },
   "authors": [
@@ -19,10 +19,12 @@
   "require": {
     "php": ">=8.2",
     "northrook/core": "dev-main",
-    "northrook/logger": "dev-main"
+    "northrook/logger": "dev-main",
+    "symfony/http-kernel": "^7.1",
+    "symfony/dependency-injection": "^7.1",
+    "symfony/http-foundation": "^7.1"
   },
   "require-dev": {
-    "northrook/dev-env": "dev-main",
-    "symfony/http-foundation": "@stable"
+    "northrook/dev-env": "dev-main"
   }
 }
