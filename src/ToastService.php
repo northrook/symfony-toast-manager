@@ -12,9 +12,7 @@ use function Northrook\hashKey;
 
 final readonly class ToastService
 {
-    public function __construct( private Http\RequestStack $requestStack ) {
-        dump( $this->flashBag() );
-    }
+    public function __construct( private Http\RequestStack $requestStack ) {}
 
     private function getFlashBagMessage( string $key ) : ?Message {
         return $this->flashBag()->get( $key )[ 0 ] ?? null;
