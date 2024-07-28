@@ -1,6 +1,6 @@
 <?php
 
-namespace Northrook\Symfony\Service\ToastService;
+namespace Northrook\Symfony\Service\Toasts;
 
 use InvalidArgumentException;
 use Northrook\Core\Timestamp;

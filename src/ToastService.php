@@ -2,9 +2,8 @@
 
 declare( strict_types = 1 );
 
-namespace Northrook\Symfony\Service;
+namespace Northrook\Symfony\Service\Toasts;
 
-use Northrook\Symfony\Service\ToastService\Message;
 use Stringable;
 use Symfony\Component\HttpFoundation as Http;
 use Symfony\Component\HttpFoundation\Exception\SessionNotFoundException;
