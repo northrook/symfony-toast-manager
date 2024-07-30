@@ -12,7 +12,7 @@ use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
 /**
  * @author  Martin Nielsen <mn@northrook.com>
  */
-class SymfonyToastsBundle extends AbstractBundle
+final class SymfonyToastsBundle extends AbstractBundle
 {
 
     public function loadExtension(
@@ -25,7 +25,7 @@ class SymfonyToastsBundle extends AbstractBundle
 
         $services->set( ToastService::class )
                  ->args( [ service( 'request_stack' ) ] )
-                 ->autowire( true );
+                 ->autowire();
     }
 
     public function getPath() : string {

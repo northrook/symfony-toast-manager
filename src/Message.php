@@ -2,7 +2,7 @@
 
 namespace Northrook\Symfony\Service\Toasts;
 
-use InvalidArgumentException;
+use InvalidArgumentException, Countable;
 use Northrook\Core\Timestamp;
 use Northrook\Core\Trait\PropertyAccessor;
 use Northrook\Logger\Log;
@@ -22,7 +22,7 @@ use function Northrook\hashKey;
  * @internal
  * @author Martin Nielsen <mn@northrook.com>
  */
-final class Message implements \Countable
+final class Message implements Countable
 {
     use PropertyAccessor;
 
@@ -95,7 +95,7 @@ final class Message implements \Countable
             // If the $type is a valid level, add it, otherwise throw an exception for incident management
             $this->type = in_array( $type, [ 'info', 'success', 'warning', 'error', 'notice' ] )
                 ? $type
-                : throw new InvalidArgumentException( "Invalid type '{$type}' used for " . Notification::class );
+                : throw new InvalidArgumentException( "Invalid type '{$type}' used for " . Message::class );
         }
         catch ( InvalidArgumentException $exception ) {
             // Immediately catch and log the exception, then set the type to 'notice'

@@ -83,9 +83,4 @@ final readonly class ToastService
     private function flashBag() : FlashBagInterface {
         return $this->requestStack->getSession()->getFlashBag();
     }
-
-    private function flashBagContents() : array {
-        return $this->flashBag()->peekAll();
-    }
-
 }
