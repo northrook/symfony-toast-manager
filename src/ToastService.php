@@ -10,9 +10,11 @@ use Symfony\Component\HttpFoundation\Exception\SessionNotFoundException;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use function Northrook\hashKey;
 
-final readonly class ToastService
+final class ToastService
 {
-    public function __construct( private Http\RequestStack $requestStack ) {}
+    private static FlashBagInterface $flashBag;
+
+    public function __construct( private readonly Http\RequestStack $requestStack ) {}
 
     private function getFlashBagMessage( string $key ) : ?Message {
         return $this->flashBag()->get( $key )[ 0 ] ?? null;
@@ -81,6 +83,13 @@ final readonly class ToastService
      * @throws SessionNotFoundException if no session is active
      */
     private function flashBag() : FlashBagInterface {
-        return $this->requestStack->getSession()->getFlashBag();
+        return $this::$flashBag ??= $this->requestStack->getSession()->getFlashBag();
+    }
+
+    public static function getFlashBagContents() : array {
+        if ( !isset( ToastService::$flashBag ) ) {
+            return [];
+        }
+        return ToastService::$flashBag->all();
     }
 }
