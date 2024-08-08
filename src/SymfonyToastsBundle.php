@@ -14,7 +14,6 @@ use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
  */
 final class SymfonyToastsBundle extends AbstractBundle
 {
-
     public function loadExtension(
         array                 $config,
         ContainerConfigurator $container,
@@ -29,6 +28,6 @@ final class SymfonyToastsBundle extends AbstractBundle
     }
 
     public function getPath() : string {
-        return dirname( __DIR__ );
+        return \dirname( __DIR__ );
     }
 }

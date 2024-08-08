@@ -1,5 +1,7 @@
 <?php
 
+declare ( strict_types = 1 );
+
 namespace Northrook\Symfony\Service\Toasts;
 
 use InvalidArgumentException, Countable;
@@ -64,7 +66,7 @@ final class Message implements Countable
     }
 
     public function count() : int {
-        return count( $this->occurrences );
+        return \count( $this->occurrences );
     }
 
     public function timeout( ?int $set = null ) : Message {
@@ -87,13 +89,13 @@ final class Message implements Countable
     }
 
     private function setMessageDescription( ?string $description ) : void {
-        $this->description = $description ? trim( $description ) : null;
+        $this->description = $description ? \trim( $description ) : null;
     }
 
     private function setMessageType( string $type ) : void {
         try {
             // If the $type is a valid level, add it, otherwise throw an exception for incident management
-            $this->type = in_array( $type, [ 'info', 'success', 'warning', 'error', 'notice' ] )
+            $this->type = \in_array( $type, [ 'info', 'success', 'warning', 'error', 'notice' ] )
                 ? $type
                 : throw new InvalidArgumentException( "Invalid type '{$type}' used for " . Message::class );
         }
@@ -105,6 +107,6 @@ final class Message implements Countable
     }
 
     private function getTimestamp() : Timestamp {
-        return $this->occurrences[ array_key_last( $this->occurrences ) ];
+        return $this->occurrences[ \array_key_last( $this->occurrences ) ];
     }
 }
